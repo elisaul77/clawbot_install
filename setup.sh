@@ -89,7 +89,7 @@ docker pull ghcr.io/wg-easy/wg-easy > /dev/null
 VPN_HASH=$(docker run --rm ghcr.io/wg-easy/wg-easy wgpw "$VPN_PASS")
 # Escape special chars for sed - need to escape $ and other special characters
 VPN_HASH_ESCAPED=$(printf '%s\n' "$VPN_HASH" | sed -e 's/[\/&]/\\&/g' -e 's/\$/\\$/g')
-sed -i "s|VPN_PASSWORD_HASH=.*|VPN_PASSWORD_HASH=${VPN_HASH_ESCAPED}|" .env
+sed -i "s|VPN_PASSWORD_HASH=.*|VPN_PASSWORD_HASH='${VPN_HASH_ESCAPED}'|" .env
 
 # 7. Self-Signed Certs (to prevent Nginx crash on first run)
 CERT_PATH="./data/certbot/conf/live/$DOMAIN_NAME"
