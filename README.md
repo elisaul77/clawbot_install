@@ -148,7 +148,11 @@ La primera vez que abras el Gateway, verás un error de "Emparejamiento Requerid
 - **Nivel 1**: Token de autenticación (configurado con `trustedProxies`)
 - **Nivel 2**: Emparejamiento de dispositivos (previene acceso no autorizado incluso con el token)
 
-**Tip**: Puedes automatizar la aprobación con `gateway.pairing.mode: "auto"` en el config, pero es menos seguro.
+**💡 Auto-Aprobación Automática**:
+Este paquete incluye un servicio que aprueba automáticamente los dispositivos nuevos. Los dispositivos se aprobarán en segundo plano cada 5 segundos. Si prefieres la aprobación manual por mayor seguridad:
+```bash
+docker-compose stop auto-approve
+```
 
 ## 📁 Estructura de Archivos
 

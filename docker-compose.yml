@@ -75,6 +75,20 @@ services:
       - ./data/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
+  # Auto-approve service (automatically approves device pairing requests)
+  auto-approve:
+    image: docker:latest
+    container_name: clawbot_auto_approve
+    environment:
+      - CLAWDBOT_GATEWAY_TOKEN=${CLAWDBOT_TOKEN}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./scripts/auto-approve-devices.sh:/auto-approve.sh:ro
+    command: sh /auto-approve.sh
+    restart: unless-stopped
+    depends_on:
+      - gateway
+
 networks:
   backend_net:
     driver: bridge
