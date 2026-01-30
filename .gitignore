@@ -1,0 +1,14 @@
+# Env files
+.env
+
+# Data directories (Persistent storage)
+data/
+logs/
+
+# Node
+node_modules/
+npm-debug.log
+
+# System
+.DS_Store
+Thumbs.db
