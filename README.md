@@ -66,9 +66,7 @@ No hay problema. El instalador funcionará igual, solo usarás la IP directament
    El script automáticamente:
    - Detecta el token generado en el Paso 1 y lo sincroniza con la configuración del servidor.
    - Genera el hash de la contraseña VPN.
-````   - Calcula el hash de tu contraseña.
    - Crea certificados SSL.
-   - **SINCRONIZA** el token generado en el Paso 1 con la configuración de Nginx.
 
 4. **PASO 3: Iniciar los Servicios**:
    ```bash
