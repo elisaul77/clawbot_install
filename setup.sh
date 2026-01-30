@@ -78,7 +78,7 @@ else
     RAW_TOKEN=$(openssl rand -hex 32)
 fi
 
-sed -i "s/CLAWBOT_TOKEN=.*/CLAWBOT_TOKEN=$RAW_TOKEN/" .env
+sed -i "s/CLAWDBOT_TOKEN=.*/CLAWDBOT_TOKEN=$RAW_TOKEN/" .env
 
 # Update clawdbot.json
 sed -i "s/REPLACE_WITH_YOUR_TOKEN_HASH/$RAW_TOKEN/" config/clawdbot.json
@@ -88,9 +88,9 @@ echo "Generating VPN Password Hash..."
 # Note: This requires the wg-easy image to be pulled. We'll do a quick run.
 docker pull ghcr.io/wg-easy/wg-easy > /dev/null
 VPN_HASH=$(docker run --rm ghcr.io/wg-easy/wg-easy wgpw "$VPN_PASS")
-# Escape special chars for sed
-VPN_HASH_ESCAPED=$(printf '%s\n' "$VPN_HASH" | sed -e 's/[\/&]/\\&/g')
-sed -i "s/VPN_PASSWORD_HASH=.*/VPN_PASSWORD_HASH=$VPN_HASH_ESCAPED/" .env
+# Escape special chars for sed - need to escape $ and other special characters
+VPN_HASH_ESCAPED=$(printf '%s\n' "$VPN_HASH" | sed -e 's/[\/&]/\\&/g' -e 's/\$/\\$/g')
+sed -i "s|VPN_PASSWORD_HASH=.*|VPN_PASSWORD_HASH=${VPN_HASH_ESCAPED}|" .env
 
 # 7. Self-Signed Certs (to prevent Nginx crash on first run)
 CERT_PATH="./data/certbot/conf/live/$DOMAIN_NAME"
