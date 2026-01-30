@@ -1,6 +1,10 @@
 # Env files
 .env
 
+# Config files with sensitive data
+config/clawdbot.json
+config/nginx.conf
+
 # Data directories (Persistent storage)
 data/
 logs/

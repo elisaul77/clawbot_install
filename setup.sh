@@ -53,8 +53,10 @@ fi
 sed -i "s/DOMAIN_NAME=.*/DOMAIN_NAME=$DOMAIN_NAME/" .env
 sed -i "s/VPN_PUBLIC_IP=.*/VPN_PUBLIC_IP=$VPN_IP/" .env
 
-# Update Nginx Config
-sed -i "s/\${DOMAIN_NAME}/$DOMAIN_NAME/g" config/nginx.conf
+# Create Nginx Config from example
+echo -e "${YELLOW}Creando configuración de Nginx...${NC}"
+cp config/nginx.conf.example config/nginx.conf
+sed -i "s/YOUR_DOMAIN_OR_IP/$DOMAIN_NAME/g" config/nginx.conf
 
 # 5. Security Token Generation
 echo -e "${YELLOW}Generando Token de Seguridad...${NC}"
