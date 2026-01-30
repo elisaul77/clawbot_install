@@ -48,6 +48,8 @@ No hay problema. El instalador funcionará igual, solo usarás la IP directament
    - **Login**: Te dará un código para ingresar en `https://github.com/login/device`.
    - **WhatsApp (Opcional)**: Si quieres usar el bot por WhatsApp, escanea el QR.
    
+   **⚠️ IMPORTANTE**: El asistente generará automáticamente un **token de autenticación** único durante esta configuración inicial. Este token quedará guardado en `data/clawbot_home/.clawdbot/clawdbot.json` y será sincronizado automáticamente con el servidor en el siguiente paso.
+   
    ⏱️ **Duración**: 3-5 minutos (incluye login en GitHub).
 
 3. **PASO 2: Configuración del Servidor (VPN + Nginx)**:
@@ -62,8 +64,9 @@ No hay problema. El instalador funcionará igual, solo usarás la IP directament
    - **Contraseña VPN**: Elige una segura.
    
    El script automáticamente:
-   - Genera tokens de seguridad únicos.
-   - Calcula el hash de tu contraseña.
+   - Detecta el token generado en el Paso 1 y lo sincroniza con la configuración del servidor.
+   - Genera el hash de la contraseña VPN.
+````   - Calcula el hash de tu contraseña.
    - Crea certificados SSL.
    - **SINCRONIZA** el token generado en el Paso 1 con la configuración de Nginx.
 
@@ -156,11 +159,10 @@ docker-compose stop auto-approve
 
 ## 📁 Estructura de Archivos
 
-- `docker-compose.yml`: Define los 3 servicios (VPN, Nginx, Clawbot).
-- `config/clawdbot.json`: Configuración del Gateway de IA.
-- `config/nginx.conf`: Reglas del servidor web.
-- `data/`: Almacenamiento persistente (backups, logs, etc).
-- `.env`: Variables de entorno (IP, contraseñas, tokens). ¡No lo compartas!
+- `docker-compose.yml`: Define los servicios (VPN, Nginx, Clawbot, Auto-Approve).
+- `config/nginx.conf`: Reglas del servidor web (generado desde `.example`).
+- `data/`: Almacenamiento persistente (backups, logs, configuración del onboarding).
+- `.env`: Variables de entorno (IP, contraseñas, token sincronizado). ¡No lo compartas!
 
 ## 🔧 Solución de Problemas
 
@@ -182,6 +184,9 @@ docker-compose restart proxy
 
 **P: ¿Necesito pagar por un dominio?**
 R: No. Puedes usar tu IP directamente. El único "inconveniente" es que el navegador te advertirá sobre el certificado autofirmado (pero es seguro porque solo tú accedes por VPN).
+
+**P: ¿Qué pasa con el token de autenticación?**
+R: El token se genera **automáticamente** durante el onboarding (Paso 1). El script `setup.sh` lo detecta y lo sincroniza con el servidor. No necesitas copiarlo ni guardarlo manualmente.
 
 **P: ¿Qué VPS recomiendas?**
 R: Cualquier VPS con 2GB RAM y Docker. Ejemplos: DigitalOcean ($6/mes), Hetzner (€4/mes), Vultr ($6/mes).

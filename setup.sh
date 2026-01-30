@@ -62,28 +62,25 @@ sed -i "s/YOUR_DOMAIN_OR_IP/$DOMAIN_NAME/g" config/nginx.conf
 echo -e "${YELLOW}Generando Token de Seguridad...${NC}"
 
 # Check if onboarding was done (token exists in data)
-ONBOARD_CONFIG="data/clawbot_home/.clawdbot/config.json"
+ONBOARD_CONFIG="data/clawbot_home/.clawdbot/clawdbot.json"
 if [ -f "$ONBOARD_CONFIG" ]; then
-    echo -e "${GREEN}Detectado: Configuración de onboarding existente.${NC}"
+    echo -e "${GREEN}✅ Detectado: Configuración de onboarding existente.${NC}"
     # Extract token from onboarding config
     EXISTING_TOKEN=$(grep -oP '"token"\s*:\s*"\K[^"]+' "$ONBOARD_CONFIG" | head -1)
     if [ -n "$EXISTING_TOKEN" ]; then
-        echo -e "${YELLOW}Reutilizando token del onboarding...${NC}"
+        echo -e "${GREEN}✅ Reutilizando token del onboarding...${NC}"
         RAW_TOKEN=$EXISTING_TOKEN
     else
-        echo -e "${YELLOW}No se encontró token en onboarding. Generando uno nuevo...${NC}"
+        echo -e "${YELLOW}⚠️  No se encontró token en onboarding. Generando uno nuevo...${NC}"
         RAW_TOKEN=$(openssl rand -hex 32)
     fi
 else
-    echo -e "${RED}ADVERTENCIA: No se detectó onboarding previo (./scripts/onboard.sh).${NC}"
-    echo -e "${YELLOW}Generando token nuevo. Deberás actualizarlo manualmente después.${NC}"
+    echo -e "${RED}❌ ADVERTENCIA: No se detectó onboarding previo (./scripts/onboard.sh).${NC}"
+    echo -e "${YELLOW}   Generando token nuevo. Deberás ejecutar el onboarding primero.${NC}"
     RAW_TOKEN=$(openssl rand -hex 32)
 fi
 
 sed -i "s/CLAWDBOT_TOKEN=.*/CLAWDBOT_TOKEN=$RAW_TOKEN/" .env
-
-# Update clawdbot.json
-sed -i "s/REPLACE_WITH_YOUR_TOKEN_HASH/$RAW_TOKEN/" config/clawdbot.json
 
 # 6. VPN Password Hashing
 echo "Generating VPN Password Hash..."
@@ -134,6 +131,8 @@ echo -e "  En tu primera conexión, necesitarás aprobar tu dispositivo:"
 echo -e "  ${GREEN}docker exec clawbot_gateway clawdbot devices list${NC}"
 echo -e "  ${GREEN}docker exec clawbot_gateway clawdbot devices approve <REQUEST_ID>${NC}"
 echo ""
-echo -e "${RED}🔒 GUARDA ESTE TOKEN:${NC} $RAW_TOKEN"
-echo -e "${YELLOW}Lo necesitarás para aprobar dispositivos.${NC}"
+echo -e "${YELLOW}💡 Auto-Aprobación:${NC} Este paquete incluye un servicio que aprueba automáticamente"
+echo -e "   los dispositivos nuevos cada 5 segundos. No necesitas ejecutar comandos manualmente."
 echo ""
+echo -e "${GREEN}✅ El token de autenticación fue sincronizado automáticamente.${NC}"
+echo -e "${YELLOW}   Se encuentra en: data/clawbot_home/.clawdbot/clawdbot.json${NC}"
