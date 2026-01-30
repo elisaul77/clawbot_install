@@ -1,5 +1,28 @@
 # 📦 Clawbot Community Package - Release Notes
 
+## Versión 1.0.2 (Enero 2026)
+
+### 🔒 SEGURIDAD CRÍTICA
+
+1. **Gateway ya NO está expuesto a internet público**
+   - **Problema**: Los puertos 80 y 443 estaban expuestos públicamente, permitiendo acceso sin VPN
+   - **Solución**: Eliminados `ports` del servicio proxy, ahora solo usa `expose` (acceso interno)
+   - **Impacto**: El Gateway ahora **SOLO** es accesible vía VPN en `https://172.22.0.9`
+   - **Archivos modificados**:
+     - `docker-compose.yml`: Cambio de `ports` a `expose` en servicio proxy
+     - `README.md`: Actualizada sección de acceso con IP interna
+     - `setup.sh`: Mensaje actualizado con advertencia de seguridad
+
+⚠️ **IMPORTANTE**: Si ya tienes la instalación activa, ejecuta `docker-compose down && docker-compose up -d` para aplicar los cambios.
+
+### 📝 Notas de Seguridad
+
+- **Antes**: Gateway accesible desde cualquier lugar de internet (puerto 443 público)
+- **Ahora**: Gateway SOLO accesible desde dispositivos conectados a la VPN
+- **Acceso**: `https://172.22.0.9` (IP interna en red Docker backend_net)
+
+---
+
 ## Versión 1.0.1 (Enero 2026)
 
 ### 🐛 Correcciones

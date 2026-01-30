@@ -95,14 +95,18 @@ No hay problema. El instalador funcionará igual, solo usarás la IP directament
 
 ### 2. Acceder al Gateway de IA
 
+⚠️ **IMPORTANTE: Solo accesible vía VPN** - El Gateway NO está expuesto a internet público por seguridad.
+
+**Desde tu dispositivo con VPN conectada:**
+
 **Si usaste un DOMINIO**:
-- Abre: `https://ai.tudominio.com`
+- Abre: `https://172.22.0.9` (IP interna del proxy en la red Docker)
 
 **Si usaste una IP**:
-- Abre: `https://TU_IP_PUBLICA`
+- Abre: `https://172.22.0.9` (IP interna del proxy en la red Docker)
 - Tu navegador dirá "Su conexión no es privada" o "Riesgo de seguridad". ¡Esto es normal!
 - **Cómo proceder**:
-  - Chrome/Edge: Haz clic en "Avanzado" → "Ir a [IP] (no seguro)".
+  - Chrome/Edge: Haz clic en "Avanzado" → "Ir a 172.22.0.9 (no seguro)".
   - Firefox: "Avanzado" → "Aceptar el riesgo y continuar".
   
 💡 **¿Por qué pasa esto?**: Los certificados SSL "reales" (de Let's Encrypt) requieren un dominio. Como usaste una IP, el instalador creó un certificado "autofirmado" que funciona igual, pero el navegador no lo reconoce. Solo tú puedes acceder (por la VPN), así que es seguro.
