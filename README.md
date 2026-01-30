@@ -113,28 +113,42 @@ No hay problema. El instalador funcionará igual, solo usarás la IP directament
 
 ### 3. Emparejar tu Dispositivo (Resolver Errores 4008/1008)
 
-La primera vez que abras el Gateway, puede que veas un error de "Emparejamiento Requerido" o código `1008`. Esto es una **capa extra de seguridad**.
+La primera vez que abras el Gateway, verás un error de "Emparejamiento Requerido" o código `1008/4008`. Esto es una **capa extra de seguridad** de Clawbot.
 
-**Solución Manual**:
-1. Abre una terminal en tu servidor:
+**Proceso de Aprobación:**
+
+1. **Lista los dispositivos pendientes** en tu servidor:
    ```bash
-   docker logs clawbot_gateway
+   docker exec clawbot_gateway clawdbot devices list
    ```
-2. Busca una línea que diga algo como:
+
+2. Verás una salida como esta:
    ```
-   device pairing requested: <ID_ALFANUMÉRICO>
+   Pending (1)
+   ┌──────────────────────────────────────┬────────────────────────────────────┐
+   │ Request                              │ Device                             │
+   ├──────────────────────────────────────┼────────────────────────────────────┤
+   │ 4b03c3ac-f9b5-4ff0-ae73-446545331100 │ ee5c6b12670888...                  │
+   └──────────────────────────────────────┴────────────────────────────────────┘
    ```
-3. Aprueba ese dispositivo:
+
+3. **Aprueba el dispositivo** usando el **Request ID** (primera columna):
    ```bash
-   docker exec clawbot_gateway clawdbot devices approve <ID_ALFANUMÉRICO>
+   docker exec clawbot_gateway clawdbot devices approve <REQUEST_ID>
    ```
-4. Recarga la página en tu navegador. ¡Listo!
+   
+   Ejemplo:
+   ```bash
+   docker exec clawbot_gateway clawdbot devices approve 4b03c3ac-f9b5-4ff0-ae73-446545331100
+   ```
 
-**¿Por qué sucede esto?**: Clawbot tiene 2 niveles de seguridad:
-- **Nivel 1**: Token de autenticación (ya configurado).
-- **Nivel 2**: Emparejamiento de dispositivos (para evitar que incluso con el token, alguien más se conecte).
+4. **Recarga la página** en tu navegador. ¡Listo!
 
-Este paquete ya incluye la configuración de `trustedProxies` para minimizar este problema. Pero en el primer acceso, es posible que debas aprobar manualmente.
+**¿Por qué sucede esto?** Clawbot tiene 2 niveles de seguridad:
+- **Nivel 1**: Token de autenticación (configurado con `trustedProxies`)
+- **Nivel 2**: Emparejamiento de dispositivos (previene acceso no autorizado incluso con el token)
+
+**Tip**: Puedes automatizar la aprobación con `gateway.pairing.mode: "auto"` en el config, pero es menos seguro.
 
 ## 📁 Estructura de Archivos
 

@@ -183,6 +183,42 @@ docker logs -f clawbot_gateway
 
 ## Solución de Problemas
 
+### Error 1008/4008: "Emparejamiento Requerido"
+**Síntoma**: Al abrir el Gateway aparece un error con código 1008 o 4008, o mensaje de "pairing required"
+
+**Causa**: Clawbot requiere aprobación manual de dispositivos nuevos por seguridad.
+
+**Solución**:
+1. En tu servidor, lista dispositivos pendientes:
+   ```bash
+   docker exec clawbot_gateway clawdbot devices list
+   ```
+2. Copia el **Request ID** (primera columna de la tabla "Pending")
+3. Aprueba el dispositivo:
+   ```bash
+   docker exec clawbot_gateway clawdbot devices approve <REQUEST_ID>
+   ```
+4. Recarga tu navegador
+
+**Ejemplo completo**:
+```bash
+# Ver dispositivos pendientes
+$ docker exec clawbot_gateway clawdbot devices list
+
+Pending (1)
+┌──────────────────────────────────────┬────────────────────────────────────┐
+│ Request                              │ Device                             │
+├──────────────────────────────────────┼────────────────────────────────────┤
+│ 4b03c3ac-f9b5-4ff0-ae73-446545331100 │ ee5c6b12670888...                  │
+└──────────────────────────────────────┴────────────────────────────────────┘
+
+# Aprobar
+$ docker exec clawbot_gateway clawdbot devices approve 4b03c3ac-f9b5-4ff0-ae73-446545331100
+Approved ee5c6b12670888...
+```
+
+**Nota**: Este proceso es necesario solo la primera vez por dispositivo.
+
 ### Error: "EACCES: permission denied" durante onboarding
 **Síntoma**: El onboarding falla con mensajes como `EACCES: permission denied, mkdir '/home/clawbot/.clawdbot/credentials'`
 
