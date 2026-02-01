@@ -87,9 +87,11 @@ echo "Generating VPN Password Hash..."
 # Note: This requires the wg-easy image to be pulled. We'll do a quick run.
 docker pull ghcr.io/wg-easy/wg-easy > /dev/null
 VPN_HASH=$(docker run --rm ghcr.io/wg-easy/wg-easy wgpw "$VPN_PASS")
-# Escape special chars for sed - need to escape $ and other special characters
-VPN_HASH_ESCAPED=$(printf '%s\n' "$VPN_HASH" | sed -e 's/[\/&]/\\&/g' -e 's/\$/\\$/g')
-sed -i "s|VPN_PASSWORD_HASH=.*|VPN_PASSWORD_HASH='${VPN_HASH_ESCAPED}'|" .env
+# Extract only the hash value from "PASSWORD_HASH='...'"
+VPN_HASH_ONLY=$(echo "$VPN_HASH" | grep -oP "(?<=PASSWORD_HASH=')[^']+")
+# Escape $ symbols by doubling them for docker-compose
+VPN_HASH_ESCAPED=$(echo "$VPN_HASH_ONLY" | sed 's/\$/\$\$/g')
+sed -i "s|VPN_PASSWORD_HASH=.*|VPN_PASSWORD_HASH=$VPN_HASH_ESCAPED|" .env
 
 # 7. Self-Signed Certs (to prevent Nginx crash on first run)
 CERT_PATH="./data/certbot/conf/live/$DOMAIN_NAME"
@@ -121,7 +123,8 @@ echo -e "  - Instala WireGuard en tu PC/móvil"
 echo ""
 echo -e "${YELLOW}PASO 4:${NC} Acceder al Gateway"
 echo -e "  ${RED}⚠️  SOLO ACCESIBLE VÍA VPN${NC}"
-echo -e "  URL: ${GREEN}https://172.22.0.9${NC} (IP interna del proxy)"
+echo -e "  URL: ${GREEN}https://172.22.0.9?token=$RAW_TOKEN${NC}"
+echo -e "  ${YELLOW}IMPORTANTE:${NC} Debes incluir el token en la URL como parámetro."
 echo -e "  ${RED}NOTA:${NC} Tu navegador mostrará 'Conexión no segura'"
 echo -e "  porque el certificado es autofirmado. Haz clic en 'Avanzado' y 'Aceptar riesgo'."
 echo -e "  ${YELLOW}El Gateway NO está expuesto a internet por seguridad.${NC}"
@@ -136,3 +139,8 @@ echo -e "   los dispositivos nuevos cada 5 segundos. No necesitas ejecutar coman
 echo ""
 echo -e "${GREEN}✅ El token de autenticación fue sincronizado automáticamente.${NC}"
 echo -e "${YELLOW}   Se encuentra en: data/clawbot_home/.clawdbot/clawdbot.json${NC}"
+echo ""
+echo -e "${YELLOW}📝 NOTA:${NC} Después de iniciar con 'docker-compose up -d', ejecuta:"
+echo -e "  ${GREEN}./scripts/post-install.sh${NC}"
+echo -e "  Este script configurará el gateway para aceptar conexiones desde el proxy."
+

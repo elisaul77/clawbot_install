@@ -100,17 +100,25 @@ No hay problema. El instalador funcionará igual, solo usarás la IP directament
 
 **Desde tu dispositivo con VPN conectada:**
 
-**Si usaste un DOMINIO**:
-- Abre: `https://172.22.0.9` (IP interna del proxy en la red Docker)
+**⚠️ IMPORTANTE: Debes incluir el token en la URL**
 
-**Si usaste una IP**:
-- Abre: `https://172.22.0.9` (IP interna del proxy en la red Docker)
+Para acceder al Gateway, necesitas agregar tu token de autenticación:
+
+```
+https://172.22.0.9?token=TU_TOKEN_AQUI
+```
+
+**¿Dónde encuentro mi token?**
+- En el archivo `.env` (variable `CLAWDBOT_TOKEN`)
+- O en: `data/clawbot_home/.clawdbot/clawdbot.json`
+
+**Si usaste un DOMINIO o una IP**:
 - Tu navegador dirá "Su conexión no es privada" o "Riesgo de seguridad". ¡Esto es normal!
 - **Cómo proceder**:
   - Chrome/Edge: Haz clic en "Avanzado" → "Ir a 172.22.0.9 (no seguro)".
   - Firefox: "Avanzado" → "Aceptar el riesgo y continuar".
   
-💡 **¿Por qué pasa esto?**: Los certificados SSL "reales" (de Let's Encrypt) requieren un dominio. Como usaste una IP, el instalador creó un certificado "autofirmado" que funciona igual, pero el navegador no lo reconoce. Solo tú puedes acceder (por la VPN), así que es seguro.
+💡 **¿Por qué pasa esto?**: Los certificados SSL "reales" (de Let's Encrypt) requieren un dominio. Como estamos usando IP interna, el instalador creó un certificado "autofirmado" que funciona igual, pero el navegador no lo reconoce. Solo tú puedes acceder (por la VPN), así que es seguro.
 
 ### 3. Emparejar tu Dispositivo (Resolver Errores 4008/1008)
 
