@@ -36,8 +36,8 @@ RUN mkdir -p /home/clawbot/.clawdbot /home/clawbot/clawd /home/clawbot/logs && \
 # Set working directory
 WORKDIR /home/clawbot
 
-# Switch to non-root user
-USER clawbot
+# Run as root user
+USER root
 
 # Set environment
 ENV NODE_ENV=production
