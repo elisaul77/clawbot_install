@@ -269,9 +269,9 @@ Para tareas específicas, consulta las skills detalladas:
 
 | Skill | Archivo | Uso |
 |-------|---------|-----|
-| 🐍 Python Services | [python-services-expert.md](.github/skills/python-services-expert.md) | Desarrollo de scripts bash/python |
-| 🐳 Docker Compose | [docker-compose-expert.md](.github/skills/docker-compose-expert.md) | Configuración de contenedores |
-| 🔧 Debugger | [application-debugger.md](.github/skills/application-debugger.md) | Depuración de errores |
+| 🐍 Python Services | [python-services-expert/SKILL.md](skills/python-services-expert/SKILL.md) | Desarrollo de scripts bash/python |
+| 🐳 Docker Compose | [docker-compose-expert/SKILL.md](skills/docker-compose-expert/SKILL.md) | Configuración de contenedores |
+| 🔧 Debugger | [debugger/SKILL.md](skills/debugger/SKILL.md) | Depuración de errores |
 
 ---
 

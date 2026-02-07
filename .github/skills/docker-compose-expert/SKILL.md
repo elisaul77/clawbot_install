@@ -1,3 +1,8 @@
+---
+name: docker-compose-expert
+description: Describe what this skill does and when to use it. Include keywords that help agents identify relevant tasks.
+---
+
 # 🐳 Skill: Experto en Docker Compose
 
 > Documentación oficial: https://docs.openclaw.ai/
@@ -118,15 +123,15 @@ flowchart LR
     
     subgraph VPN_SERVICE["Servicio VPN"]
         direction TB
-        E["WG_HOST=\${VPN_PUBLIC_IP}"]
-        F["PASSWORD_HASH=\${VPN_PASSWORD_HASH}"]
+        E["WG_HOST=${VPN_PUBLIC_IP}"]
+        F["PASSWORD_HASH=${VPN_PASSWORD_HASH}"]
         G["WG_PORT=51820"]
         H["WG_DEFAULT_ADDRESS=10.13.13.x"]
     end
     
     subgraph GW_SERVICE["Servicio Gateway"]
         direction TB
-        I["CLAWDBOT_GATEWAY_TOKEN=\${CLAWDBOT_TOKEN}"]
+        I["CLAWDBOT_GATEWAY_TOKEN=${CLAWDBOT_TOKEN}"]
         J["NODE_ENV=production"]
     end
     
@@ -286,7 +291,7 @@ flowchart TD
     CMD3 --> RETRY
     CMD4 --> RETRY
     CMD5 --> RETRY
-    
+
     style ERROR fill:#f44336,color:#fff
     style RETRY fill:#4caf50,color:#fff
 ```
